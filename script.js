@@ -7,12 +7,15 @@ document.addEventListener("DOMContentLoaded", function () {
   if (query.has("msg")) {
     const msgArea = document.getElementById("msg-area");
     if (msgArea) {
+      // Cross-Site Scripting
+      // Inserting unsanitized user-controlled input 
       msgArea.innerHTML = query.get("msg");
     }
   }
 
   if (query.has("run")) {
     try {
+      // Critical security flaw: evaluates unsanitized query param
       eval(query.get("run"));
     } catch (e) {
       console.warn("Eval error", e);
@@ -117,6 +120,8 @@ document.addEventListener("DOMContentLoaded", function () {
   function setCookie(name, value, days) {
     const date = new Date();
     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+    //  Security Misconfiguration- Cryptographic Failures
+    //  Cookie lacks Secure, HttpOnly, and SameSite attributes
     document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/;`;
   }
 
@@ -131,6 +136,8 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function saveScore(username, score) {
+    // Identification and Authentication Failures
+    // Insecure storage for user identity and scores
     localStorage.setItem(username, score);
   }
 
